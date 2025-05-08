@@ -24,6 +24,9 @@ RUN --mount=${mountArgs} \
     await fs.writeFile(path.join(scratchDir, 'Dancefile.extract'), dancefileContent);
     console.log(dancefileContent);
 
+    console.log(`Starting cache extraction for source: ${cacheSource}`);
+    console.log(`Target path: ${getTargetPath(cacheOptions)}`);
+
     // Extract Data into Docker Image
     await run('docker', ['buildx', 'build', '--builder', builder, '-f', path.join(scratchDir, 'Dancefile.extract'), '--tag', 'dance:extract', '--load', scratchDir]);
 
@@ -40,6 +43,10 @@ RUN --mount=${mountArgs} \
         ['docker', ['cp', '-L', 'cache-container:/var/dance-cache', '-']],
         ['tar', ['-H', 'posix', '-x', '-C', scratchDir]]
     );
+
+    console.log(`Checking extracted content in scratch dir:`);
+    const files = await fs.readdir(path.join(scratchDir, 'dance-cache', cacheSource));
+    console.log('Extracted files:', files);
 
     // Move Cache into Its Place
     await run('sudo', ['rm', '-rf', cacheSource]);
