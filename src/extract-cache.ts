@@ -18,8 +18,8 @@ async function extractCache(cacheSource: string, cacheOptions: CacheOptions, scr
 FROM ${containerImage}
 COPY buildstamp buildstamp
 RUN --mount=${mountArgs} \
-    mkdir -p /var/dance-cache/ \
-    && cp -p -R ${targetPath}/. /var/dance-cache/ || true
+    mkdir -p /var/dance-cache/${cacheSource} \
+    && cp -p -R ${targetPath}/. /var/dance-cache/${cacheSource} || true
 `;
     await fs.writeFile(path.join(scratchDir, 'Dancefile.extract'), dancefileContent);
     console.log(dancefileContent);
@@ -43,7 +43,7 @@ RUN --mount=${mountArgs} \
 
     // Move Cache into Its Place
     await run('sudo', ['rm', '-rf', cacheSource]);
-    await fs.rename(path.join(scratchDir, 'dance-cache'), cacheSource);
+    await fs.rename(path.join(scratchDir, 'dance-cache', cacheSource), cacheSource);
 }
 
 export async function extractCaches(opts: Opts) {

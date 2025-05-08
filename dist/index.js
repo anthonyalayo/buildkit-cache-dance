@@ -7218,8 +7218,8 @@ async function $8d40300f3635b768$var$extractCache(cacheSource, cacheOptions, scr
 FROM ${containerImage}
 COPY buildstamp buildstamp
 RUN --mount=${mountArgs} \
-    mkdir -p /var/dance-cache/ \
-    && cp -p -R ${targetPath}/. /var/dance-cache/ || true
+    mkdir -p /var/dance-cache/${cacheSource} \
+    && cp -p -R ${targetPath}/. /var/dance-cache/${cacheSource} || true
 `;
     await (0, $evV72$fspromises).writeFile((0, $evV72$path).join(scratchDir, 'Dancefile.extract'), dancefileContent);
     console.log(dancefileContent);
@@ -7278,7 +7278,7 @@ RUN --mount=${mountArgs} \
         '-rf',
         cacheSource
     ]);
-    await (0, $evV72$fspromises).rename((0, $evV72$path).join(scratchDir, 'dance-cache'), cacheSource);
+    await (0, $evV72$fspromises).rename((0, $evV72$path).join(scratchDir, 'dance-cache', cacheSource), cacheSource);
 }
 async function $8d40300f3635b768$export$bd3cfa0c41fc7012(opts) {
     if (opts["skip-extraction"]) {
