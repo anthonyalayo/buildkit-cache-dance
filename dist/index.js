@@ -7218,11 +7218,19 @@ async function $8d40300f3635b768$var$extractCache(cacheSource, cacheOptions, scr
 FROM ${containerImage}
 COPY buildstamp buildstamp
 RUN --mount=${mountArgs} \
+    echo "Contents of ${targetPath}:" && \
+    ls -la ${targetPath} && \
     mkdir -p /var/dance-cache/${cacheSource} \
-    && cp -p -R ${targetPath}/. /var/dance-cache/${cacheSource} || true
+    && cp -p -R ${targetPath}/. /var/dance-cache/${cacheSource} && \
+    echo "Contents of /var/dance-cache/${cacheSource}:" && \
+    ls -la /var/dance-cache/${cacheSource}
 `;
     await (0, $evV72$fspromises).writeFile((0, $evV72$path).join(scratchDir, 'Dancefile.extract'), dancefileContent);
-    console.log("Extraction Dockerfile content:");
+    console.log("Cache extraction configuration:");
+    console.log(`Source: ${cacheSource}`);
+    console.log(`Target: ${targetPath}`);
+    console.log(`Mount args: ${mountArgs}`);
+    console.log("\nDockerfile content:");
     console.log(dancefileContent);
     console.log(`Starting cache extraction for source: ${cacheSource}`);
     console.log(`Target path: ${(0, $76d06fcdc9bff1f5$export$febacabd0d01c81)(cacheOptions)}`);

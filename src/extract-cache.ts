@@ -18,11 +18,19 @@ async function extractCache(cacheSource: string, cacheOptions: CacheOptions, scr
 FROM ${containerImage}
 COPY buildstamp buildstamp
 RUN --mount=${mountArgs} \
+    echo "Contents of ${targetPath}:" && \
+    ls -la ${targetPath} && \
     mkdir -p /var/dance-cache/${cacheSource} \
-    && cp -p -R ${targetPath}/. /var/dance-cache/${cacheSource} || true
+    && cp -p -R ${targetPath}/. /var/dance-cache/${cacheSource} && \
+    echo "Contents of /var/dance-cache/${cacheSource}:" && \
+    ls -la /var/dance-cache/${cacheSource}
 `;
     await fs.writeFile(path.join(scratchDir, 'Dancefile.extract'), dancefileContent);
-    console.log("Extraction Dockerfile content:");
+    console.log("Cache extraction configuration:");
+    console.log(`Source: ${cacheSource}`);
+    console.log(`Target: ${targetPath}`);
+    console.log(`Mount args: ${mountArgs}`);
+    console.log("\nDockerfile content:");
     console.log(dancefileContent);
 
     console.log(`Starting cache extraction for source: ${cacheSource}`);
