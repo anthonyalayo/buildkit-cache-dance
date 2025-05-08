@@ -7222,6 +7222,7 @@ RUN --mount=${mountArgs} \
     && cp -p -R ${targetPath}/. /var/dance-cache/${cacheSource} || true
 `;
     await (0, $evV72$fspromises).writeFile((0, $evV72$path).join(scratchDir, 'Dancefile.extract'), dancefileContent);
+    console.log("Extraction Dockerfile content:");
     console.log(dancefileContent);
     console.log(`Starting cache extraction for source: ${cacheSource}`);
     console.log(`Target path: ${(0, $76d06fcdc9bff1f5$export$febacabd0d01c81)(cacheOptions)}`);

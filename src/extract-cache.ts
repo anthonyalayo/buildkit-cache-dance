@@ -22,6 +22,7 @@ RUN --mount=${mountArgs} \
     && cp -p -R ${targetPath}/. /var/dance-cache/${cacheSource} || true
 `;
     await fs.writeFile(path.join(scratchDir, 'Dancefile.extract'), dancefileContent);
+    console.log("Extraction Dockerfile content:");
     console.log(dancefileContent);
 
     console.log(`Starting cache extraction for source: ${cacheSource}`);
