@@ -27,9 +27,7 @@ RUN --mount=${mountArgs} \
         'buildx', 'build',
         ...(builder ? ['--builder', builder] : []),
         '-f', path.join(scratchDir, 'Dancefile.extract'),
-        '--tag', 'dance:extract',
-        '--load',
-        scratchDir
+        '--tag', 'dance:extract', '--load', '.'
     ];
 
     console.log('Running:', ['docker', ...extractArgs].join(' '));

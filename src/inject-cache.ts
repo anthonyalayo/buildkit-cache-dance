@@ -41,8 +41,7 @@ RUN --mount=${mountArgs} \
         'buildx', 'build',
         ...(builder ? ['--builder', builder] : []), // Only include if builder is set
         '-f', path.join(scratchDir, 'Dancefile.inject'),
-        '--tag', 'dance:inject',
-        cacheSource
+        '--tag', 'dance:inject', '.'
     ];
 
     console.log('Running:', ['docker', ...dockerArgs].join(' '));

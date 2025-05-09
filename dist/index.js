@@ -7177,7 +7177,7 @@ RUN --mount=${mountArgs} \
         (0, $evV72$path).join(scratchDir, 'Dancefile.inject'),
         '--tag',
         'dance:inject',
-        cacheSource
+        '.'
     ];
     console.log('Running:', [
         'docker',
@@ -7246,7 +7246,7 @@ RUN --mount=${mountArgs} \
         '--tag',
         'dance:extract',
         '--load',
-        scratchDir
+        '.'
     ];
     console.log('Running:', [
         'docker',
