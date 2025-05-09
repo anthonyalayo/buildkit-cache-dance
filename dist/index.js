@@ -7162,7 +7162,7 @@ async function $bd1d73aff0732146$var$injectCache(cacheSource, cacheOptions, scra
 FROM ${containerImage}
 COPY buildstamp buildstamp
 RUN --mount=${mountArgs} \
-    --mount=type=bind,source=.,target=/var/dance-cache/${cacheSource} \
+    --mount=type=bind,source=./${cacheSource},target=/var/dance-cache/${cacheSource} \
     cp -p -R /var/dance-cache/${cacheSource}/. ${targetPath} ${ownershipCommand} || true
 `;
     await (0, $evV72$fspromises).writeFile((0, $evV72$path).join(scratchDir, 'Dancefile.inject'), dancefileContent);
@@ -7186,7 +7186,7 @@ RUN --mount=${mountArgs} \
     console.log(dancefileContent);
     // Inject Data into Docker Cache
     await (0, $4c028fad90f63861$export$889ea624f2cb2c57)('docker', dockerArgs);
-    const files = await (0, $evV72$fspromises).readdir((0, $evV72$path).join('var', 'dance-cache', cacheSource));
+    const files = await (0, $evV72$fspromises).readdir(cacheSource);
     console.log('Extracted files:', files);
     // Clean Directories
     try {
