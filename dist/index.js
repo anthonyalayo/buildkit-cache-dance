@@ -7186,6 +7186,8 @@ RUN --mount=${mountArgs} \
     console.log(dancefileContent);
     // Inject Data into Docker Cache
     await (0, $4c028fad90f63861$export$889ea624f2cb2c57)('docker', dockerArgs);
+    const files = await (0, $evV72$fspromises).readdir((0, $evV72$path).join('var', 'dance-cache', cacheSource));
+    console.log('Extracted files:', files);
     // Clean Directories
     try {
         await (0, $evV72$fspromises).rm(cacheSource, {

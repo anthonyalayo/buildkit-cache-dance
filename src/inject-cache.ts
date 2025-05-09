@@ -51,6 +51,9 @@ RUN --mount=${mountArgs} \
     // Inject Data into Docker Cache
     await run('docker', dockerArgs);
 
+    const files = await fs.readdir(path.join('var', 'dance-cache', cacheSource));
+    console.log('Extracted files:', files);
+
     // Clean Directories
     try {
         await fs.rm(cacheSource, { recursive: true, force: true });
