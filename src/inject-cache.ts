@@ -32,8 +32,8 @@ async function injectCache(cacheSource: string, cacheOptions: CacheOptions, scra
 FROM ${containerImage}
 COPY buildstamp buildstamp
 RUN --mount=${mountArgs} \
-    --mount=type=bind,source=./${cacheSource},target=/var/dance-cache/${cacheSource} \
-    cp -p -R /var/dance-cache/${cacheSource}/. ${targetPath} ${ownershipCommand} || true
+    --mount=type=bind,source=./${cacheSource},target=/tmp/${cacheSource} \
+    cp -p -R /tmp/${cacheSource}/. ${targetPath} ${ownershipCommand} || true
 `;
     await fs.writeFile(path.join(scratchDir, 'Dancefile.inject'), dancefileContent);
 

@@ -18,12 +18,8 @@ async function extractCache(cacheSource: string, cacheOptions: CacheOptions, scr
 FROM ${containerImage}
 COPY buildstamp buildstamp
 RUN --mount=${mountArgs} \
-    echo "Contents of ${targetPath}:" && \
-    ls -la ${targetPath} && \
-    mkdir -p /var/dance-cache/${cacheSource} \
-    && cp -p -R ${targetPath}/. /var/dance-cache/${cacheSource} && \
-    echo "Contents of /var/dance-cache/${cacheSource}:" && \
-    ls -la /var/dance-cache/${cacheSource}
+    mkdir -p /tmp/${cacheSource} \
+    && cp -p -R ${targetPath}/. /tmp/${cacheSource}
 `;
     await fs.writeFile(path.join(scratchDir, 'Dancefile.extract'), dancefileContent);
 
@@ -52,16 +48,16 @@ RUN --mount=${mountArgs} \
 
     // Unpack Docker Image into Scratch
     await runPiped(
-        ['docker', ['cp', '-L', 'cache-container:/var/dance-cache', '-']],
+        ['docker', ['cp', '-L', 'cache-container:/tmp/${cacheSource}', '-']],
         ['tar', ['-H', 'posix', '-x', '-C', scratchDir]]
     );
 
-    const files = await fs.readdir(path.join(scratchDir, 'dance-cache', cacheSource));
+    const files = await fs.readdir(path.join(scratchDir, cacheSource));
     console.log('Extracted files:', files);
 
     // Move Cache into Its Place
     await run('sudo', ['rm', '-rf', cacheSource]);
-    await fs.rename(path.join(scratchDir, 'dance-cache', cacheSource), cacheSource);
+    await fs.rename(path.join(scratchDir, cacheSource), cacheSource);
 }
 
 export async function extractCaches(opts: Opts) {

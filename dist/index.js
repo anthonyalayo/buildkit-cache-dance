@@ -7162,8 +7162,8 @@ async function $bd1d73aff0732146$var$injectCache(cacheSource, cacheOptions, scra
 FROM ${containerImage}
 COPY buildstamp buildstamp
 RUN --mount=${mountArgs} \
-    --mount=type=bind,source=./${cacheSource},target=/var/dance-cache/${cacheSource} \
-    cp -p -R /var/dance-cache/${cacheSource}/. ${targetPath} ${ownershipCommand} || true
+    --mount=type=bind,source=./${cacheSource},target=/tmp/${cacheSource} \
+    cp -p -R /tmp/${cacheSource}/. ${targetPath} ${ownershipCommand} || true
 `;
     await (0, $evV72$fspromises).writeFile((0, $evV72$path).join(scratchDir, 'Dancefile.inject'), dancefileContent);
     const dockerArgs = [
@@ -7230,12 +7230,8 @@ async function $8d40300f3635b768$var$extractCache(cacheSource, cacheOptions, scr
 FROM ${containerImage}
 COPY buildstamp buildstamp
 RUN --mount=${mountArgs} \
-    echo "Contents of ${targetPath}:" && \
-    ls -la ${targetPath} && \
-    mkdir -p /var/dance-cache/${cacheSource} \
-    && cp -p -R ${targetPath}/. /var/dance-cache/${cacheSource} && \
-    echo "Contents of /var/dance-cache/${cacheSource}:" && \
-    ls -la /var/dance-cache/${cacheSource}
+    mkdir -p /tmp/${cacheSource} \
+    && cp -p -R ${targetPath}/. /tmp/${cacheSource}
 `;
     await (0, $evV72$fspromises).writeFile((0, $evV72$path).join(scratchDir, 'Dancefile.extract'), dancefileContent);
     const extractArgs = [
@@ -7282,7 +7278,7 @@ RUN --mount=${mountArgs} \
         [
             'cp',
             '-L',
-            'cache-container:/var/dance-cache',
+            'cache-container:/tmp/${cacheSource}',
             '-'
         ]
     ], [
@@ -7295,7 +7291,7 @@ RUN --mount=${mountArgs} \
             scratchDir
         ]
     ]);
-    const files = await (0, $evV72$fspromises).readdir((0, $evV72$path).join(scratchDir, 'dance-cache', cacheSource));
+    const files = await (0, $evV72$fspromises).readdir((0, $evV72$path).join(scratchDir, cacheSource));
     console.log('Extracted files:', files);
     // Move Cache into Its Place
     await (0, $4c028fad90f63861$export$889ea624f2cb2c57)('sudo', [
@@ -7303,7 +7299,7 @@ RUN --mount=${mountArgs} \
         '-rf',
         cacheSource
     ]);
-    await (0, $evV72$fspromises).rename((0, $evV72$path).join(scratchDir, 'dance-cache', cacheSource), cacheSource);
+    await (0, $evV72$fspromises).rename((0, $evV72$path).join(scratchDir, cacheSource), cacheSource);
 }
 async function $8d40300f3635b768$export$bd3cfa0c41fc7012(opts) {
     if (opts["skip-extraction"]) {
