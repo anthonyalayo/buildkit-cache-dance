@@ -46,7 +46,7 @@ RUN --mount=${mountArgs} \
 
     // Unpack Docker Image into Scratch
     await runPiped(
-        ['docker', ['cp', '-L', 'cache-container:/tmp/${cacheSource}', '-']],
+        ['docker', ['cp', '-L', `cache-container:/tmp/${cacheSource}`, '-']],
         ['tar', ['-H', 'posix', '-x', '-C', scratchDir]]
     );
 

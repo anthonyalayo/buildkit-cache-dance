@@ -7278,7 +7278,7 @@ RUN --mount=${mountArgs} \
         [
             'cp',
             '-L',
-            'cache-container:/tmp/${cacheSource}',
+            `cache-container:/tmp/${cacheSource}`,
             '-'
         ]
     ], [
