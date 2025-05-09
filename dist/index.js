@@ -7318,7 +7318,10 @@ async function $8d40300f3635b768$export$bd3cfa0c41fc7012(opts) {
     const containerImage = opts['utility-image'];
     const builder = (0, $76d06fcdc9bff1f5$export$932deacb99c42350)(opts);
     // Extract Caches for each source-target pair
-    for (const [cacheSource, cacheOptions] of Object.entries(cacheMap))await $8d40300f3635b768$var$extractCache(cacheSource, cacheOptions, scratchDir, containerImage, builder);
+    for (const [cacheSource, cacheOptions] of Object.entries(cacheMap)){
+        console.log('builder is: ' + builder);
+        await $8d40300f3635b768$var$extractCache(cacheSource, cacheOptions, scratchDir, containerImage, builder);
+    }
 }
 
 

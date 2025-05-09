@@ -86,6 +86,7 @@ export async function extractCaches(opts: Opts) {
 
     // Extract Caches for each source-target pair
     for (const [cacheSource, cacheOptions] of Object.entries(cacheMap)) {
+        console.log('builder is: ' + builder);
         await extractCache(cacheSource, cacheOptions, scratchDir, containerImage, builder);
     }
 }
