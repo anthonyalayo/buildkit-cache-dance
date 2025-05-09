@@ -16,7 +16,7 @@ async function extractCache(cacheSource: string, cacheOptions: CacheOptions, scr
 
     const dancefileContent = `
 FROM ${containerImage}
-COPY buildstamp buildstamp
+COPY scratch/buildstamp buildstamp
 RUN --mount=${mountArgs} \
     mkdir -p /tmp/${cacheSource} \
     && cp -p -R ${targetPath}/. /tmp/${cacheSource}

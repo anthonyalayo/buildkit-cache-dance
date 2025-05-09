@@ -7149,7 +7149,7 @@ async function $bd1d73aff0732146$var$injectCache(cacheSource, cacheOptions, scra
     });
     // Prepare Timestamp for Layer Cache Busting
     const date = new Date().toISOString();
-    await (0, $evV72$fspromises).writeFile((0, $evV72$path).join(cacheSource, 'buildstamp'), date);
+    await (0, $evV72$fspromises).writeFile((0, $evV72$path).join(scratchDir, 'buildstamp'), date);
     const targetPath = (0, $76d06fcdc9bff1f5$export$febacabd0d01c81)(cacheOptions);
     const mountArgs = (0, $76d06fcdc9bff1f5$export$238315f403b84074)(cacheOptions);
     // If UID OR GID are set, then add chown to restore files ownership.
@@ -7160,7 +7160,7 @@ async function $bd1d73aff0732146$var$injectCache(cacheSource, cacheOptions, scra
     // Prepare Dancefile to Access Caches
     const dancefileContent = `
 FROM ${containerImage}
-COPY buildstamp buildstamp
+COPY scratch/buildstamp buildstamp
 RUN --mount=${mountArgs} \
     --mount=type=bind,source=./${cacheSource},target=/tmp/${cacheSource} \
     cp -p -R /tmp/${cacheSource}/. ${targetPath} ${ownershipCommand} || true
@@ -7228,7 +7228,7 @@ async function $8d40300f3635b768$var$extractCache(cacheSource, cacheOptions, scr
     const mountArgs = (0, $76d06fcdc9bff1f5$export$238315f403b84074)(cacheOptions);
     const dancefileContent = `
 FROM ${containerImage}
-COPY buildstamp buildstamp
+COPY scratch/buildstamp buildstamp
 RUN --mount=${mountArgs} \
     mkdir -p /tmp/${cacheSource} \
     && cp -p -R ${targetPath}/. /tmp/${cacheSource}

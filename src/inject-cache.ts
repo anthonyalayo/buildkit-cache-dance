@@ -14,7 +14,7 @@ async function injectCache(cacheSource: string, cacheOptions: CacheOptions, scra
 
     // Prepare Timestamp for Layer Cache Busting
     const date = new Date().toISOString();
-    await fs.writeFile(path.join(cacheSource, 'buildstamp'), date);
+    await fs.writeFile(path.join(scratchDir, 'buildstamp'), date);
 
     const targetPath = getTargetPath(cacheOptions);
     const mountArgs = getMountArgsString(cacheOptions);
@@ -30,7 +30,7 @@ async function injectCache(cacheSource: string, cacheOptions: CacheOptions, scra
     // Prepare Dancefile to Access Caches
     const dancefileContent = `
 FROM ${containerImage}
-COPY buildstamp buildstamp
+COPY scratch/buildstamp buildstamp
 RUN --mount=${mountArgs} \
     --mount=type=bind,source=./${cacheSource},target=/tmp/${cacheSource} \
     cp -p -R /tmp/${cacheSource}/. ${targetPath} ${ownershipCommand} || true
