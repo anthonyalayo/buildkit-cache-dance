@@ -6515,6 +6515,7 @@ var $54b0c2f7fc5ba86a$var$DockerfileParser;
 
 
 function $76d06fcdc9bff1f5$export$77714ac6976d0316(args) {
+    console.log('input was: ' + (0, $bbb9dac42384d004$exports.getInput)("builder"));
     const opts = (0, $ec42a3295e12ea98$export$2e2bcd8739ae039)(args, {
         default: {
             "cache-map": (0, $bbb9dac42384d004$exports.getInput)("cache-map") || "{}",
@@ -6640,6 +6641,7 @@ function $76d06fcdc9bff1f5$export$238315f403b84074(cacheOptions) {
     }
 }
 function $76d06fcdc9bff1f5$export$932deacb99c42350(opts) {
+    console.log('inside builder, map contains: ' + opts["builder"]);
     return opts["builder"] == null || opts["builder"] == "" ? "" : opts["builder"];
 }
 
@@ -7203,7 +7205,10 @@ async function $bd1d73aff0732146$export$38c65e9f06d3d433(opts) {
     const containerImage = opts['utility-image'];
     const builder = (0, $76d06fcdc9bff1f5$export$932deacb99c42350)(opts);
     // Inject Caches for each source-target pair
-    for (const [cacheSource, cacheOptions] of Object.entries(cacheMap))await $bd1d73aff0732146$var$injectCache(cacheSource, cacheOptions, scratchDir, containerImage, builder);
+    for (const [cacheSource, cacheOptions] of Object.entries(cacheMap)){
+        console.log('builder is: ' + builder);
+        await $bd1d73aff0732146$var$injectCache(cacheSource, cacheOptions, scratchDir, containerImage, builder);
+    }
 }
 
 

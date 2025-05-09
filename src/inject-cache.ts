@@ -68,6 +68,7 @@ export async function injectCaches(opts: Opts) {
     const builder = getBuilder(opts);
     // Inject Caches for each source-target pair
     for (const [cacheSource, cacheOptions] of Object.entries(cacheMap)) {
+        console.log('builder is: ' + builder);
         await injectCache(cacheSource, cacheOptions, scratchDir, containerImage, builder);
     }
 }

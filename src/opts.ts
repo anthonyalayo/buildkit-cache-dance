@@ -19,6 +19,9 @@ export type Opts = {
 }
 
 export function parseOpts(args: string[]): mri.Argv<Opts> {
+
+    console.log('input was: ' + getInput("builder"));
+
   const opts = mri<Opts>(args, {
     default: {
       "cache-map": getInput("cache-map") || "{}",
@@ -178,5 +181,6 @@ export function getMountArgsString(cacheOptions: CacheOptions): string {
 }
 
 export function getBuilder(opts: Opts): string {
+    console.log('inside builder, map contains: ' + opts["builder"]);
     return opts["builder"] == null || opts["builder"] == "" ? "" : opts["builder"];
 }
