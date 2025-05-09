@@ -26,16 +26,6 @@ RUN --mount=${mountArgs} \
     ls -la /var/dance-cache/${cacheSource}
 `;
     await fs.writeFile(path.join(scratchDir, 'Dancefile.extract'), dancefileContent);
-    console.log("Cache extraction configuration:");
-    console.log(`Source: ${cacheSource}`);
-    console.log(`Target: ${targetPath}`);
-    console.log(`Mount args: ${mountArgs}`);
-    console.log("\nDockerfile content:");
-    console.log(dancefileContent);
-
-    console.log(`Starting cache extraction for source: ${cacheSource}`);
-    console.log(`Target path: ${getTargetPath(cacheOptions)}`);
-
 
     const extractArgs = [
         'buildx', 'build',
@@ -46,8 +36,10 @@ RUN --mount=${mountArgs} \
         scratchDir
     ];
 
-    // Extract Data into Docker Image
     console.log('Running:', ['docker', ...extractArgs].join(' '));
+    console.log(dancefileContent);
+
+    // Extract Data into Docker Image
     await run('docker', extractArgs);
 
     // Create Extraction Image
@@ -64,7 +56,6 @@ RUN --mount=${mountArgs} \
         ['tar', ['-H', 'posix', '-x', '-C', scratchDir]]
     );
 
-    console.log(`Checking extracted content in scratch dir:`);
     const files = await fs.readdir(path.join(scratchDir, 'dance-cache', cacheSource));
     console.log('Extracted files:', files);
 
@@ -86,7 +77,6 @@ export async function extractCaches(opts: Opts) {
 
     // Extract Caches for each source-target pair
     for (const [cacheSource, cacheOptions] of Object.entries(cacheMap)) {
-        console.log('builder is: ' + builder);
         await extractCache(cacheSource, cacheOptions, scratchDir, containerImage, builder);
     }
 }

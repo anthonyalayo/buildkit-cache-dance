@@ -19,9 +19,6 @@ export type Opts = {
 }
 
 export function parseOpts(args: string[]): mri.Argv<Opts> {
-
-    console.log('input was: ' + getInput("builder"));
-
   const opts = mri<Opts>(args, {
     default: {
       "cache-map": getInput("cache-map") || "{}",
@@ -30,7 +27,7 @@ export function parseOpts(args: string[]): mri.Argv<Opts> {
       "skip-extraction": (getInput("skip-extraction") || "false") === "true",
       "extract": process.env[`STATE_POST`] !== undefined,
       "utility-image": getInput("utility-image") || "ghcr.io/containerd/busybox:latest",
-      "builder": getInput("builder") || "",
+      "builder": getInput("builder") || "default",
       "help": false,
     },
     string: ["cache-map", "dockerfile", "scratch-dir", "cache-source", "cache-target", "utility-image", "builder"],
@@ -181,6 +178,5 @@ export function getMountArgsString(cacheOptions: CacheOptions): string {
 }
 
 export function getBuilder(opts: Opts): string {
-    console.log('inside builder, map contains: ' + opts["builder"]);
-    return opts["builder"] == null || opts["builder"] == "" ? "" : opts["builder"];
+    return opts["builder"] == null || opts["builder"] == "" ? "default" : opts["builder"];
 }

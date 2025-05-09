@@ -36,7 +36,6 @@ RUN --mount=${mountArgs} \
     cp -p -R /var/dance-cache/${cacheSource}/. ${targetPath} ${ownershipCommand} || true
 `;
     await fs.writeFile(path.join(scratchDir, 'Dancefile.inject'), dancefileContent);
-    console.log(dancefileContent);
 
     const dockerArgs = [
         'buildx', 'build',
@@ -46,8 +45,10 @@ RUN --mount=${mountArgs} \
         cacheSource
     ];
 
-    // Inject Data into Docker Cache
     console.log('Running:', ['docker', ...dockerArgs].join(' '));
+    console.log(dancefileContent);
+
+    // Inject Data into Docker Cache
     await run('docker', dockerArgs);
 
     // Clean Directories

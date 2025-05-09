@@ -6515,7 +6515,6 @@ var $54b0c2f7fc5ba86a$var$DockerfileParser;
 
 
 function $76d06fcdc9bff1f5$export$77714ac6976d0316(args) {
-    console.log('input was: ' + (0, $bbb9dac42384d004$exports.getInput)("builder"));
     const opts = (0, $ec42a3295e12ea98$export$2e2bcd8739ae039)(args, {
         default: {
             "cache-map": (0, $bbb9dac42384d004$exports.getInput)("cache-map") || "{}",
@@ -6524,7 +6523,7 @@ function $76d06fcdc9bff1f5$export$77714ac6976d0316(args) {
             "skip-extraction": ((0, $bbb9dac42384d004$exports.getInput)("skip-extraction") || "false") === "true",
             "extract": process.env[`STATE_POST`] !== undefined,
             "utility-image": (0, $bbb9dac42384d004$exports.getInput)("utility-image") || "ghcr.io/containerd/busybox:latest",
-            "builder": (0, $bbb9dac42384d004$exports.getInput)("builder") || "",
+            "builder": (0, $bbb9dac42384d004$exports.getInput)("builder") || "default",
             "help": false
         },
         string: [
@@ -6641,8 +6640,7 @@ function $76d06fcdc9bff1f5$export$238315f403b84074(cacheOptions) {
     }
 }
 function $76d06fcdc9bff1f5$export$932deacb99c42350(opts) {
-    console.log('inside builder, map contains: ' + opts["builder"]);
-    return opts["builder"] == null || opts["builder"] == "" ? "" : opts["builder"];
+    return opts["builder"] == null || opts["builder"] == "" ? "default" : opts["builder"];
 }
 
 
@@ -7168,7 +7166,6 @@ RUN --mount=${mountArgs} \
     cp -p -R /var/dance-cache/${cacheSource}/. ${targetPath} ${ownershipCommand} || true
 `;
     await (0, $evV72$fspromises).writeFile((0, $evV72$path).join(scratchDir, 'Dancefile.inject'), dancefileContent);
-    console.log(dancefileContent);
     const dockerArgs = [
         'buildx',
         'build',
@@ -7182,11 +7179,12 @@ RUN --mount=${mountArgs} \
         'dance:inject',
         cacheSource
     ];
-    // Inject Data into Docker Cache
     console.log('Running:', [
         'docker',
         ...dockerArgs
     ].join(' '));
+    console.log(dancefileContent);
+    // Inject Data into Docker Cache
     await (0, $4c028fad90f63861$export$889ea624f2cb2c57)('docker', dockerArgs);
     // Clean Directories
     try {
@@ -7238,14 +7236,6 @@ RUN --mount=${mountArgs} \
     ls -la /var/dance-cache/${cacheSource}
 `;
     await (0, $evV72$fspromises).writeFile((0, $evV72$path).join(scratchDir, 'Dancefile.extract'), dancefileContent);
-    console.log("Cache extraction configuration:");
-    console.log(`Source: ${cacheSource}`);
-    console.log(`Target: ${targetPath}`);
-    console.log(`Mount args: ${mountArgs}`);
-    console.log("\nDockerfile content:");
-    console.log(dancefileContent);
-    console.log(`Starting cache extraction for source: ${cacheSource}`);
-    console.log(`Target path: ${(0, $76d06fcdc9bff1f5$export$febacabd0d01c81)(cacheOptions)}`);
     const extractArgs = [
         'buildx',
         'build',
@@ -7260,11 +7250,12 @@ RUN --mount=${mountArgs} \
         '--load',
         scratchDir
     ];
-    // Extract Data into Docker Image
     console.log('Running:', [
         'docker',
         ...extractArgs
     ].join(' '));
+    console.log(dancefileContent);
+    // Extract Data into Docker Image
     await (0, $4c028fad90f63861$export$889ea624f2cb2c57)('docker', extractArgs);
     // Create Extraction Image
     try {
@@ -7302,7 +7293,6 @@ RUN --mount=${mountArgs} \
             scratchDir
         ]
     ]);
-    console.log(`Checking extracted content in scratch dir:`);
     const files = await (0, $evV72$fspromises).readdir((0, $evV72$path).join(scratchDir, 'dance-cache', cacheSource));
     console.log('Extracted files:', files);
     // Move Cache into Its Place
@@ -7323,10 +7313,7 @@ async function $8d40300f3635b768$export$bd3cfa0c41fc7012(opts) {
     const containerImage = opts['utility-image'];
     const builder = (0, $76d06fcdc9bff1f5$export$932deacb99c42350)(opts);
     // Extract Caches for each source-target pair
-    for (const [cacheSource, cacheOptions] of Object.entries(cacheMap)){
-        console.log('builder is: ' + builder);
-        await $8d40300f3635b768$var$extractCache(cacheSource, cacheOptions, scratchDir, containerImage, builder);
-    }
+    for (const [cacheSource, cacheOptions] of Object.entries(cacheMap))await $8d40300f3635b768$var$extractCache(cacheSource, cacheOptions, scratchDir, containerImage, builder);
 }
 
 
