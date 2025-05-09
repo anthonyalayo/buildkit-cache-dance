@@ -178,5 +178,5 @@ export function getMountArgsString(cacheOptions: CacheOptions): string {
 }
 
 export function getBuilder(opts: Opts): string {
-    return opts["builder"] == null || opts["builder"] == "" ? "default" : opts["builder"];
+    return opts["builder"] == null || opts["builder"] == "" ? "" : opts["builder"];
 }

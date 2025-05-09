@@ -38,8 +38,17 @@ RUN --mount=${mountArgs} \
     await fs.writeFile(path.join(scratchDir, 'Dancefile.inject'), dancefileContent);
     console.log(dancefileContent);
 
+    const dockerArgs = [
+        'buildx', 'build',
+        ...(builder ? ['--builder', builder] : []), // Only include if builder is set
+        '-f', path.join(scratchDir, 'Dancefile.inject'),
+        '--tag', 'dance:inject',
+        cacheSource
+    ];
+
     // Inject Data into Docker Cache
-    await run('docker', ['buildx', 'build', '--builder', builder ,'-f', path.join(scratchDir, 'Dancefile.inject'), '--tag', 'dance:inject', cacheSource]);
+    console.log('Running:', ['docker', ...dockerArgs].join(' '));
+    await run('docker', dockerArgs);
 
     // Clean Directories
     try {

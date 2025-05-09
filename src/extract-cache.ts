@@ -36,8 +36,19 @@ RUN --mount=${mountArgs} \
     console.log(`Starting cache extraction for source: ${cacheSource}`);
     console.log(`Target path: ${getTargetPath(cacheOptions)}`);
 
+
+    const extractArgs = [
+        'buildx', 'build',
+        ...(builder ? ['--builder', builder] : []),
+        '-f', path.join(scratchDir, 'Dancefile.extract'),
+        '--tag', 'dance:extract',
+        '--load',
+        scratchDir
+    ];
+
     // Extract Data into Docker Image
-    await run('docker', ['buildx', 'build', '--builder', builder, '-f', path.join(scratchDir, 'Dancefile.extract'), '--tag', 'dance:extract', '--load', scratchDir]);
+    console.log('Running:', ['docker', ...extractArgs].join(' '));
+    await run('docker', extractArgs);
 
     // Create Extraction Image
     try {

@@ -6640,7 +6640,7 @@ function $76d06fcdc9bff1f5$export$238315f403b84074(cacheOptions) {
     }
 }
 function $76d06fcdc9bff1f5$export$932deacb99c42350(opts) {
-    return opts["builder"] == null || opts["builder"] == "" ? "default" : opts["builder"];
+    return opts["builder"] == null || opts["builder"] == "" ? "" : opts["builder"];
 }
 
 
@@ -7167,18 +7167,25 @@ RUN --mount=${mountArgs} \
 `;
     await (0, $evV72$fspromises).writeFile((0, $evV72$path).join(scratchDir, 'Dancefile.inject'), dancefileContent);
     console.log(dancefileContent);
-    // Inject Data into Docker Cache
-    await (0, $4c028fad90f63861$export$889ea624f2cb2c57)('docker', [
+    const dockerArgs = [
         'buildx',
         'build',
-        '--builder',
-        builder,
+        ...builder ? [
+            '--builder',
+            builder
+        ] : [],
         '-f',
         (0, $evV72$path).join(scratchDir, 'Dancefile.inject'),
         '--tag',
         'dance:inject',
         cacheSource
-    ]);
+    ];
+    // Inject Data into Docker Cache
+    console.log('Running:', [
+        'docker',
+        ...dockerArgs
+    ].join(' '));
+    await (0, $4c028fad90f63861$export$889ea624f2cb2c57)('docker', dockerArgs);
     // Clean Directories
     try {
         await (0, $evV72$fspromises).rm(cacheSource, {
@@ -7234,19 +7241,26 @@ RUN --mount=${mountArgs} \
     console.log(dancefileContent);
     console.log(`Starting cache extraction for source: ${cacheSource}`);
     console.log(`Target path: ${(0, $76d06fcdc9bff1f5$export$febacabd0d01c81)(cacheOptions)}`);
-    // Extract Data into Docker Image
-    await (0, $4c028fad90f63861$export$889ea624f2cb2c57)('docker', [
+    const extractArgs = [
         'buildx',
         'build',
-        '--builder',
-        builder,
+        ...builder ? [
+            '--builder',
+            builder
+        ] : [],
         '-f',
         (0, $evV72$path).join(scratchDir, 'Dancefile.extract'),
         '--tag',
         'dance:extract',
         '--load',
         scratchDir
-    ]);
+    ];
+    // Extract Data into Docker Image
+    console.log('Running:', [
+        'docker',
+        ...extractArgs
+    ].join(' '));
+    await (0, $4c028fad90f63861$export$889ea624f2cb2c57)('docker', extractArgs);
     // Create Extraction Image
     try {
         await (0, $4c028fad90f63861$export$889ea624f2cb2c57)('docker', [
