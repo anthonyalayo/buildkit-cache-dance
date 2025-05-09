@@ -27,7 +27,7 @@ export function parseOpts(args: string[]): mri.Argv<Opts> {
       "skip-extraction": (getInput("skip-extraction") || "false") === "true",
       "extract": process.env[`STATE_POST`] !== undefined,
       "utility-image": getInput("utility-image") || "ghcr.io/containerd/busybox:latest",
-      "builder": getInput("builder") || "default",
+      "builder": getInput("builder") || "",
       "help": false,
     },
     string: ["cache-map", "dockerfile", "scratch-dir", "cache-source", "cache-target", "utility-image", "builder"],

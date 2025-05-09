@@ -6523,7 +6523,7 @@ function $76d06fcdc9bff1f5$export$77714ac6976d0316(args) {
             "skip-extraction": ((0, $bbb9dac42384d004$exports.getInput)("skip-extraction") || "false") === "true",
             "extract": process.env[`STATE_POST`] !== undefined,
             "utility-image": (0, $bbb9dac42384d004$exports.getInput)("utility-image") || "ghcr.io/containerd/busybox:latest",
-            "builder": (0, $bbb9dac42384d004$exports.getInput)("builder") || "default",
+            "builder": (0, $bbb9dac42384d004$exports.getInput)("builder") || "",
             "help": false
         },
         string: [
